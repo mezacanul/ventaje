@@ -1,6 +1,6 @@
 import axios from "axios";
 import CircleIcon from "../common/CircleIcon";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoMdTime } from "react-icons/io";
 import { FiMessageSquare } from "react-icons/fi";
 import { RiRobot2Line } from "react-icons/ri";
@@ -17,7 +17,7 @@ function initialGreeting(dispatch) {
     const initConfig = { type: "incoming", author: "🤖 Dev" };
     const init = [
         "Hello Human!",
-        "This is a test for chat messaging.\nYou can send a message to try the UI"
+        "This is a test for chat messaging.\nYou can send a message to try the UI",
     ];
     setTimeout(() => {
         dispatch(addMessage({ ...initConfig, message: init[0] }));
@@ -33,7 +33,7 @@ export default function InputPanel() {
     const [value, setValue] = useState("");
 
     useEffect(() => {
-        setIsMounted(true)
+        setIsMounted(true);
 
         if (isMounted == true) {
             initialGreeting(dispatch);
@@ -60,13 +60,13 @@ export default function InputPanel() {
                 const res = await axios.post("/api/chatgpt", {
                     messages: message,
                 });
-                console.log(res.data.choices[0].message.content) // Update state with the response
-                return res.data.choices[0].message.content
+                console.log(res.data.choices[0].message.content); // Update state with the response
+                return res.data.choices[0].message.content;
             } catch (error) {
                 console.error("Error sending message:", error);
-                return (`Error sending message: ${error}`)
+                return `Error sending message: ${error}`;
             }
-        }
+        };
 
         dispatch(
             addMessage({
@@ -78,7 +78,7 @@ export default function InputPanel() {
         );
         setValue("");
 
-        sendMessage(value).then((data)=>{
+        sendMessage(value).then((data) => {
             setTimeout(() => {
                 dispatch(
                     addMessage({
@@ -90,7 +90,7 @@ export default function InputPanel() {
                     })
                 );
             }, 750);
-        })
+        });
     };
 
     function handleKeyUp(e) {
@@ -123,7 +123,9 @@ function SendButton({ onClick }) {
             as={"button"}
             onClick={onClick}
             borderRadius={"0.4rem"}
-            {...scaleEffect}
+            // {...scaleEffect}
+            _hover={{ color: "purple", bg: "white", cursor: "pointer" }}
+            transition={"all 0.3s"}
             ml={"-1rem"}
             zIndex={1}
             boxShadow={"0px 0px 1px white"}
@@ -149,9 +151,20 @@ function Timer() {
 }
 
 function InputField({ onChange, value, onKeyUp }) {
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        // Focus the input in the child component on load
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, []);
+
     return (
         <FormControl isInvalid={false}>
             <Input
+                ref={inputRef}
+                required={true}
                 bg={"lightGreyBlue"}
                 value={value}
                 onChange={onChange}

@@ -1,6 +1,14 @@
-import { useDispatch, useSelector } from "react-redux";
-import { addMessage } from "@/store/slices/messagesSlice";
-import { Box, Grid, Heading, HStack, Text, VStack } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+import {
+    Box,
+    Button,
+    Circle,
+    Grid,
+    Heading,
+    HStack,
+    Text,
+    VStack,
+} from "@chakra-ui/react";
 import { FiFilter, FiShare2 } from "react-icons/fi";
 import { PiChartLineUpBold } from "react-icons/pi";
 import { PiChatCircleBold } from "react-icons/pi";
@@ -9,6 +17,13 @@ import InputPanel from "./MessageInterface/InputPanel";
 import CircleIcon from "./common/CircleIcon";
 import { useEffect, useRef } from "react";
 import { MotionBox } from "./MotionBox";
+import { HiOutlinePhone } from "react-icons/hi";
+import { IoDocumentTextOutline } from "react-icons/io5";
+import { FaXmark } from "react-icons/fa6";
+import { IoMdInformationCircleOutline } from "react-icons/io";
+import { RiArrowLeftSLine } from "react-icons/ri";
+import { GoPerson } from "react-icons/go";
+
 
 export default function MessageInterface() {
     return (
@@ -66,14 +81,15 @@ function InsightsPanel() {
                 </ContextPanel>
 
                 <ContextPanel
-                    title={"Converstaion Insights"}
-                    icon={<PiChatCircleBold />}
+                    title={"Lead Profile"}
+                    icon={<GoPerson />}
                 >
-                    <Text>
-                        The user greets with "hello friend" indicating a
-                        friendly and Informal approach to starting a
-                        conversation.
+                    <Text as={"b"}>
+                        Demographics:
                     </Text>
+                    <Text>Age: 30</Text>
+                    <Text>Gender: Male</Text>
+                    <Text>Location: Mérida</Text>
                 </ContextPanel>
             </VStack>
         </VStack>
@@ -82,12 +98,15 @@ function InsightsPanel() {
 
 function ContextPanel({ title, icon, children }) {
     return (
-        <VStack bg={"greyBlue"} h={"38vh"} p={"1.5rem"}>
+        <VStack bg={"greyBlue"} h={"38vh"} p={"1.5rem"} align={"flex-start"} w={"100%"}>
             <HStack mb={"1rem"}>
                 <Text fontSize={"2rem"}>{icon}</Text>
                 <Heading fontSize={"2rem"}>{title}</Heading>
             </HStack>
-            {children}
+            
+            <VStack align={"flex-start"}>
+                {children}
+            </VStack>
         </VStack>
     );
 }
@@ -97,9 +116,7 @@ function RealTimeChat() {
 
     return (
         <Grid h="100vh" w={"100%"} templateRows="0.15fr 0.82fr 0.08fr">
-            <Box bg={"greyBlue"}>
-                <></>
-            </Box>
+            <ChatHeader />
 
             <MessagesContainer>
                 {messages.map((message, i) => {
@@ -117,6 +134,52 @@ function RealTimeChat() {
 
             <InputPanel />
         </Grid>
+    );
+}
+
+function ChatHeader() {
+    return (
+        <HStack
+            bg={"greyBlue"}
+            justify={"space-between"}
+            px={"2rem"}
+            boxShadow={`0px 5px 20px ${hexToRgba("#000000", 0.3)}`}
+            zIndex={2}
+        >
+            <HStack spacing={"1rem"}>
+                <Circle bgImage={"/profile.jpg"} bgSize={"cover"} p={"2.5rem"}/>
+                
+                <VStack align={"flex-start"}>
+                    <Heading>User 1</Heading>
+                    <Text>Product: product 1</Text>
+                </VStack>
+            </HStack>
+
+            <VStack align={"flex-end"}>
+                <Text as={"b"}>Product 1</Text>
+                <Text>Created: 10/12/2024</Text>
+                <HStack>
+                    <HStack>
+                        <CircleIcon icon={<HiOutlinePhone />} />
+                        <CircleIcon icon={<IoDocumentTextOutline />} />
+                        <CircleIcon icon={<FaXmark />} />
+                        <CircleIcon icon={<IoMdInformationCircleOutline />} />
+                        <CircleIcon icon={<RiArrowLeftSLine />} />
+                    </HStack>
+                    <Button
+                        _hover={{
+                            color: "purple",
+                            bg: "white"
+                        }}
+                        p={"1.5rem"}
+                        bg={"purple"}
+                        color={"white"}
+                    >
+                        View All Chats
+                    </Button>
+                </HStack>
+            </VStack>
+        </HStack>
     );
 }
 
@@ -166,7 +229,7 @@ function Message({ type, author, message, time }) {
             // key={index}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2}}
+            transition={{ duration: 0.2 }}
         >
             <VStack
                 align={type == "incoming" ? "flex-start" : "flex-end"}

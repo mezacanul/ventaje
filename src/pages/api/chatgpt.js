@@ -8,8 +8,11 @@ export default async function handler(req, res) {
     try {
         const completion = await openai.chat.completions.create({
             model: "gpt-4o", // Updated to match the model used in the original code
-            messages: req.body.messages, // Dynamically pass the messages from request body
-            max_tokens: 100,
+            messages: [
+                ...(req.body.messages),
+                // { role: "system", content: "Eres un chat especializado en el ramo imobiliario y hablas espanol mexicano." }
+            ],
+            max_tokens: 200,
             temperature: 0.7,
         });
 
