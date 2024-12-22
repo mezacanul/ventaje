@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-    apiKey: "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",
+    apiKey: process.env.OPENAI_API_KEY,
 });
 
 export default async function handler(req, res) {
