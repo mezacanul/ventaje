@@ -68,15 +68,17 @@ export default function InputPanel() {
             }
         }
 
+        dispatch(
+            addMessage({
+                type: "outgoing",
+                author: "Guest",
+                message: value,
+                time: getFormattedTime(),
+            })
+        );
+        setValue("");
+
         sendMessage(value).then((data)=>{
-            dispatch(
-                addMessage({
-                    type: "outgoing",
-                    author: "Guest",
-                    message: value,
-                    time: getFormattedTime(),
-                })
-            );
             setTimeout(() => {
                 dispatch(
                     addMessage({
@@ -88,7 +90,6 @@ export default function InputPanel() {
                     })
                 );
             }, 750);
-            setValue("");
         })
     };
 
