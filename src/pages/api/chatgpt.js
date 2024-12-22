@@ -5,6 +5,11 @@ const openai = new OpenAI({
 });
 
 export default async function handler(req, res) {
+    if (req.method !== "POST") {
+        res.setHeader("Allow", ["POST"]);
+        return res.status(405).end(`Method ${req.method} Not Allowed`);
+    }
+    
     try {
         const completion = await openai.chat.completions.create({
             model: "gpt-4o", // Updated to match the model used in the original code
