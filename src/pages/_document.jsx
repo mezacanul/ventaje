@@ -4,9 +4,9 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        {/* <title>Merivilla Co.</title> */}
+        <title>Merivilla Co.</title>
       </Head>
-      <body style={{background: "#ffffff"}}>
+      <body>
         <Main />
         <NextScript />
       </body>
