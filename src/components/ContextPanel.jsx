@@ -1,10 +1,9 @@
 import { GoPerson } from "react-icons/go";
-
-const { VStack, HStack, Text, Flex } = require("@chakra-ui/react");
-const { default: InsightIcon } = require("./common/InsightIcon");
-const { PiChartLineUpBold, PiChatCircleBold } = require("react-icons/pi");
-const { FiFilter, FiShare2 } = require("react-icons/fi");
-const { default: DetailsBox } = require("./DetailsBox");
+import { VStack, HStack, Text, Flex } from "@chakra-ui/react"
+import InsightIcon from "./common/InsightIcon"
+import { PiChartLineUpBold, PiChatCircleBold } from "react-icons/pi"
+import { FiFilter, FiShare2 } from "react-icons/fi"
+import DetailsBox from "./DetailsBox"
 
 export default function ContextPanel() {
     return (

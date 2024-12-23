@@ -11,7 +11,7 @@ export default function ChatInterface() {
         <Box minW={"100vw"} minH={"100vh"}>
             <Flex direction={["column-reverse", "row"]} w={"100%"} h={"100%"} spacing={0}>
                 <ContextPanel />
-                <RealTimeChat />
+                <RealTimeChat /> 
             </Flex>
         </Box>
     );
