@@ -9,8 +9,8 @@ export default async function handler(req, res) {
         const completion = await openai.chat.completions.create({
             model: "gpt-4o", // Updated to match the model used in the original code
             messages: [
+                { role: "system", content: "This is a tesing environment. Feel free to ignore my random messages." },
                 ...(req.body.messages),
-                // { role: "system", content: "Eres un chat especializado en el ramo imobiliario y hablas espanol mexicano." }
             ],
             max_tokens: 200,
             temperature: 0.7,

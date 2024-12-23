@@ -12,10 +12,10 @@ const theme = extendTheme({
         dark: "#141414",
         white: "#FFFFFF",
         light: "#f0f0f0",
-        darkBlue: "#242E47",
-        greyBlue: "#3D5A79",
-        lightGreyBlue: "#587aa1",
-        purple: "#A234FC"
+        darkBlue: "rgb(16, 20, 22)",
+        greyBlue: "rgb(22, 46, 65)",
+        lightGreyBlue: "rgb(73, 138, 155)",
+        purple: "rgb(6, 80, 100)",
     },
     styles: {
         global: {

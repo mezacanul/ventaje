@@ -10,18 +10,8 @@ const initialState = [
     {
         type: "incoming",
         author: "Dev 🤖",
-        message: "This is a test for chat messaging",
+        message: "This is a test for chat messaging. You can try sending a message to test the UI.",
     },
-    {
-        type: "incoming",
-        author: "Dev 🤖",
-        message: "You can send a message to try the UI",
-    },
-    // {
-    //     type: "outgoing",
-    //     author: "Guest",
-    //     message: "Cool! Lets try it",
-    // },
 ];
 
 const messagesSlice = createSlice({

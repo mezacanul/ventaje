@@ -1,36 +1,65 @@
 import axios from "axios";
-import CircleIcon from "../common/CircleIcon";
+import CircleIcon from "@/components/common/CircleIcon";
 import { useEffect, useRef, useState } from "react";
 import { IoMdTime } from "react-icons/io";
 import { FiMessageSquare } from "react-icons/fi";
-import { RiRobot2Line } from "react-icons/ri";
 import { FiSend } from "react-icons/fi";
 import { RiArrowRightSLine } from "react-icons/ri";
-import scaleEffect from "@/utils/scaleEffect";
-import { MdOutlineShowChart } from "react-icons/md";
 import { FormControl, HStack, Input, Text } from "@chakra-ui/react";
 import { addMessage } from "@/store/slices/messagesSlice";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setLoading } from "@/store/slices/loadingSlice";
 import getFormattedTime from "@/utils/getFormattedTime";
 
 function initialGreeting(dispatch) {
     const initConfig = { type: "incoming", author: "🤖 Dev" };
     const init = [
         "Hello Human!",
-        "This is a test for chat messaging.\nYou can send a message to try the UI",
+        "This is a test for chat messaging. I have been cofigured to remember things in our conversation so anytime you can ask me to remember what have i learned about you!",
     ];
+
     setTimeout(() => {
-        dispatch(addMessage({ ...initConfig, message: init[0] }));
+        dispatch(setLoading(true));
     }, 1000);
     setTimeout(() => {
-        dispatch(addMessage({ ...initConfig, message: init[1] }));
+        dispatch(addMessage({ ...initConfig, message: init[0] }));
     }, 2000);
+    setTimeout(() => {
+        dispatch(addMessage({ ...initConfig, message: init[1] }));
+        dispatch(setLoading(false));
+    }, 3000);
 }
 
-export default function InputPanel() {
+const sendMessage = async (messages, payload) => {
+    const prevMessages = messages.map((msg) => {
+        return {
+            role: msg.type == "incoming" ? "assistant" : "user",
+            content: msg.message,
+        };
+    });
+
+    try {
+        const message = {
+            role: "user",
+            content: payload,
+        }
+        const res = await axios.post("/api/chatgpt", {
+            // messages: [...prevMessages, message],
+            messages: [...prevMessages, message],
+        });
+        console.log(res.data.choices[0].message.content); // Update state with the response
+        return res.data.choices[0].message.content;
+    } catch (error) {
+        console.error("Error sending message:", error);
+        return `Error sending message: ${error}`;
+    }
+};
+
+export default function ChatInputPanel() {
     const [isMounted, setIsMounted] = useState(false);
     const dispatch = useDispatch();
     const [value, setValue] = useState("");
+    const messages = useSelector((state) => state.messages);
 
     useEffect(() => {
         setIsMounted(true);
@@ -49,25 +78,6 @@ export default function InputPanel() {
     };
 
     const handleSend = () => {
-        const sendMessage = async (payload) => {
-            try {
-                const message = [
-                    {
-                        role: "user",
-                        content: payload,
-                    },
-                ];
-                const res = await axios.post("/api/chatgpt", {
-                    messages: message,
-                });
-                console.log(res.data.choices[0].message.content); // Update state with the response
-                return res.data.choices[0].message.content;
-            } catch (error) {
-                console.error("Error sending message:", error);
-                return `Error sending message: ${error}`;
-            }
-        };
-
         dispatch(
             addMessage({
                 type: "outgoing",
@@ -78,19 +88,23 @@ export default function InputPanel() {
         );
         setValue("");
 
-        sendMessage(value).then((data) => {
-            setTimeout(() => {
+        setTimeout(() => {
+            dispatch(setLoading(true));
+        }, 750);
+
+        setTimeout(() => {
+            sendMessage(messages, value).then((data) => {
+                dispatch(setLoading(false));
                 dispatch(
                     addMessage({
                         type: "incoming",
                         author: "🤖 ChatGPT 4o",
-                        // message: "Automatic Reply",
                         message: data,
                         time: getFormattedTime(),
                     })
                 );
-            }, 750);
-        });
+            });
+        }, 1250);
     };
 
     function handleKeyUp(e) {
@@ -100,16 +114,20 @@ export default function InputPanel() {
     }
 
     return (
-        <HStack bg={"greyBlue"} px={"2rem"}>
+        <HStack bg={"greyBlue"} px={{base:"1rem", xl:"2rem"}}>
             <Timer />
-            <CircleIcon icon={<FiMessageSquare />} />
+            
+            <CircleIcon icon={<FiMessageSquare />} display={["none", "block"]}/>
+            
             <InputField
                 onKeyUp={handleKeyUp}
                 onChange={handleChange}
                 value={value}
             />
+            
             <SendButton onClick={handleSend} />
-            <HStack align={"center"}>
+            
+            <HStack align={"center"} display={{base:"none", xl:"flex"}}>
                 <Text w={"5rem"}>Go to Chat</Text>
                 <RiArrowRightSLine />
             </HStack>
@@ -141,12 +159,12 @@ function SendButton({ onClick }) {
 
 function Timer() {
     return (
-        <>
+        <HStack>
             <Text fontSize={"1.5rem"}>
                 <IoMdTime />
             </Text>
-            <Text>00:00</Text>
-        </>
+            <Text display={{base:"none", xl:"block"}}>00:00</Text>
+        </HStack>
     );
 }
 
