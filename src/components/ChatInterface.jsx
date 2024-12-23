@@ -1,11 +1,10 @@
-'use client'
 import {
     Box,
     Flex,
     HStack,
 } from "@chakra-ui/react";
-import ContextPanel from "./ContextPanel";
-import RealTimeChat from "./RealTimeChat";
+import ContextPanel from "@/components/ContextPanel";
+import RealTimeChat from "@/components/RealTimeChat";
 
 export default function ChatInterface() {
     return (
