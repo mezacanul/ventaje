@@ -1,3 +1,4 @@
+'use client'
 import { ChakraProvider } from "@chakra-ui/react";
 import { AnimatePresence } from "framer-motion";
 import theme from "@/style/theme";
